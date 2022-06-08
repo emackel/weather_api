@@ -2,21 +2,17 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require('cors');
 const { createProxyMiddleware } = require("http-proxy-middleware");
+const { request } = require("express");
 require("dotenv").config();
 
 // Create Express Server
 const app = express();
-const startDate = "2022-01-01"
-const endDate = "2022-05-01"
 
-const lat = 51.58
-const lon = 7.38
 
 // Configuration
 const PORT = 3000;
 const HOST = "localhost";
 const { API_BASE_URL } = process.env;
-const API_SERVICE_URL = `${API_BASE_URL}?date=${startDate}&?last_date=${endDate}&?lat=${lat}&?lon=${lon}`;
 
 // Logging the requests
 app.use(morgan("dev"));
@@ -53,4 +49,21 @@ app.get('/', (req, res) => {
         let jsonResponse = JSON.parse(body)
         latLngCoords = (jsonResponse.results[0].locations[0].latLng)
     })
+
+    // sending coordinates and date information to weather API
+    const startDate = "2022-01-01"
+    const endDate = "2022-05-01"
+    const API_SERVICE_URL = `${API_BASE_URL}?date=${startDate}&?last_date=${endDate}&?lat=${lat}&?lon=${lon}`;
+
+    request(`${API_SERVICE_URL}`, function (error, response, body) {
+        console.log('error');
+        console.log('statusCode: ', response && response.statusCode);
+        console.log('body: ', body);
+    })
+
+    // process information and return result - some psuedo code
+
+    // if(windspeed < 30 kmh, temp > 20 && temp < 30 && sunshine = maximal && precipitation = minimal ) {
+    // console.log('The best location for the picnic is: locationOfPicnic');  
+    //}
 })
