@@ -1,0 +1,42 @@
+1. If I wanted to change the workflow by adding an extra step after the stirring step, but
+before the summary, what would I have to do?
+
+In the steps section of the yml file, following the pattern of the previous steps with the step name,
+info, substeps, buttons, behaviours etc. Add the new step between the stirring and summary steps. 
+
+then in the flow section of the file, add the new step between the stirring and summary steps in the flow.
+
+If we wanted to add the step in an already in progress dynamic flow we could use the add_step event and the move_step event to add
+the new step and move it between the stirring and summary steps.
+
+
+2. When adding the iced tea mix to the flask, we also want to show the user the target
+weight, as defined at the beginning of the workflow. How would you accomplish this?
+
+If we look at the primary section of the weighing step at line 108 we see "Put {{TargetWeight}}
+of Ice Tea into the flask and press print".
+
+this {{TargetWeight}} shows the target weight defined at the beginning of the workflow.
+
+
+
+
+3. Regarding the screencast and line 146 of the template: What’s the value of the
+“data_point.qty”in that specific example?
+
+
+data_point.qty represents the Stable Weight. In this specific example the Stable Weight
+target weight - delta weight.
+
+10.0g - 0.31g = 9.69g as shown in the demonstration.
+9.69g is the value of data_point.qty
+ 
+
+
+
+4. Please explain what happens when the timer runs out on its own vs. when the user stops
+the timer manually
+
+As we see from the when block on line 212 containing on_timer_stop and on_timer_complete, when either the timer stops automatically, or 
+it stops by user input, the stirrer status is set to 0, turning it off and the substep is complete. On the demostration we see that the 
+summary is shown showing the time spent stirring as one of the data points. 
